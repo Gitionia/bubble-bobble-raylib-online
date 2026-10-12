@@ -1,0 +1,26 @@
+body {
+    background-color: rgb(0, 0, 0);
+}
+
+
+h1 {
+    color: white;
+}
+
+th {
+    font-size: x-large;
+    color: rgb(170, 13, 170)
+}
+
+td {
+    font-size: large;
+    color: red;
+}
+
+/* tr:nth-child(even) {
+    background-color: #9ce07b;
+}
+
+tr:hover {
+    background-color: rgb(136, 221, 0);
+} */

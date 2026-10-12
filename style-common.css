@@ -1,0 +1,92 @@
+@font-face {
+    font-family: C64_Pro_Mono;
+    src: url(C64_Pro_Mono-STYLE.ttf);
+}
+
+#filterInput,
+#Selection-Button,
+#themeToggleButton {
+    background-position: 10px 10px;
+    background-repeat: no-repeat;
+    background-color: rgb(248, 254, 218);
+
+    font-size: 16px;
+    padding: 12px 20px 12px 40px;
+    border: 1px solid #ddd;
+    margin-bottom: 12px;
+}
+
+#filterInput {
+    background-image: url('/css/searchicon.png');
+
+    float: left;
+}
+
+
+#Selection-Button {
+    float: inline-end;
+}
+
+#themeToggleButton {
+    float: right;
+}
+
+
+.container {
+    position: relative;
+    /* Establishes a positioning context */
+    display: flex;
+    /* Keeps siblings in flow and side-by-side */
+    align-items: center;
+    padding: 1rem;
+}
+
+.centered-header {
+    position: absolute;
+    /* Removes it from the flex flow */
+    left: 50%;
+    /* Moves the left edge to the center of the container */
+    transform: translateX(-50%);
+    /* Shifts it back by half its own width */
+
+    /* Optional: Ensure it doesn't overlap siblings on small screens */
+    white-space: nowrap;
+    z-index: 1;
+    order: 2;
+}
+
+.left-sibling {
+    order: 1;
+    /* Keep left sibling first */
+    margin-right: auto;
+    /* Push everything to the right if needed */
+}
+
+.right-sibling {
+    margin-left: auto;
+    /* Space between header and sibling */
+    order: 3;
+}
+
+
+h1 {
+    font-family: C64_Pro_Mono;
+    text-align: center;
+    position: static;
+    padding-bottom: 20px;
+
+    /* background: #a1c9c1; */
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th,
+td {
+    font-family: C64_Pro_Mono;
+    font-size: large;
+    padding: 20px;
+    text-align: center;
+}

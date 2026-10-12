@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Bobble Leaderboard</title>
+    <link id=theme rel="stylesheet" href="style-light.css">
+    <link rel="stylesheet" href="style-common.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- <button class="left-sibling" id="themeToggleButton" ">Back</button> -->
+        <h1 class="centered-header">Bubble Bobble Leaderboard</h1>
+        <button class="right-sibling" id="themeToggleButton" onclick="toggleTheme()">Switch Theme</button>
+    </div>
+
+    <input type="text" id="filterInput" onkeyup="filterByName()" placeholder="Search...">
+    <a href="https://github.com/Gitionia/bubble-bobble-raylib-online" id="Link-To-Github">Go to source code of page</a>
+
+
+
+    <div id="table-container">
+        <!-- Table will be inserted here by JavaScript -->
+    </div>
+
+    <script>
+        function toggleTheme() {
+            // Select the <link> element
+            let theme = document.getElementById('theme');
+
+            // Toggle between light.css and dark.css
+            if (theme.getAttribute('href') == 'style-light.css') {
+                theme.setAttribute('href', 'style-dark.css');
+            } else {
+                theme.setAttribute('href', 'style-light.css');
+            }
+        }
+        function filterByName() {
+            const input = document.getElementById('filterInput');
+            const filter = input.value.toUpperCase();
+
+            const container = document.getElementById('table-container');
+            const table = container.getElementsByTagName('table');
+            const tbody = container.getElementsByTagName('tbody');
+            const rows = container.getElementsByTagName('tr');
+
+            // Try filter by placement range
+            if (/^([0-9]+-[0-9]+)$/.test(filter)) {
+                const nums = filter.split("-");
+                const min = parseInt(nums[0]);
+                const max = parseInt(nums[1]);
+
+                if (Number.isInteger(min) && Number.isInteger(max) && min >= 0 && max >= 0) {
+                    for (let i = 0; i < rows.length; i++) {
+                        const row = rows[i];
+                        if (i >= min && i <= max) {
+                            row.style.display = "";
+                        } else {
+                            row.style.display = "none";
+                        }
+
+                    }
+                    return;
+                }
+            }
+            // If above fails, we try filter by text
+
+            // We start from i=1 to skip the header
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i]
+                const tds = row.getElementsByTagName("td");
+                var rowString = "";
+                for (let j = 0; j < tds.length; j++) {
+                    rowString += tds[j].textContent + ";;";
+                }
+
+
+                if (rowString.toUpperCase().includes(filter)) {
+                    row.style.display = "";
+                } else {
+                    row.style.display = "none";
+                }
+
+            }
+        }
+
+
+        // Fetch data from a URL (e.g., Supabase API)
+        fetch('https://mxknbbdufcrdzsoaugdc.supabase.co/rest/v1/leaderboard?select=*&order=level_reached.desc,score.desc,created_at.desc', {
+            headers: {
+                'apikey': 'sb_publishable_hSz_v651D6k2Y9JMah6XHw_Un4Jr1C0',
+                'Authorization': 'Bearer sb_publishable_hSz_v651D6k2Y9JMah6XHw_Un4Jr1C0',
+                'Content-Type': 'application/json'
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                data.map((row, index) => {
+                    const tempRow = {
+                        placement: index + 1,
+                        player: row.player_name,
+                        level_reached: row.level_reached,
+                        date: new Date(row.created_at).toISOString().split('T')[0],
+                        score: row.score,
+                    };
+
+                    Object.keys(row).forEach(key => delete row[key]);
+
+                    // properties should be in this order
+                    const placement = tempRow.placement;
+                    var suffix;
+                    if (placement == 1) suffix = "st";
+                    else if (placement == 2) suffix = "nd";
+                    else if (placement == 3) suffix = "rd";
+                    else suffix = "th";
+
+                    row.PLACE = placement + suffix
+                    row.ROUND = tempRow.level_reached;
+                    row.SCORE = tempRow.score;
+                    row.NAME = tempRow.player;
+                    row.DATE = tempRow.date;
+
+                    return row;
+                });
+                // Process the data and render the table
+                renderTable(data);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                document.getElementById('table-container').innerHTML =
+                    '<p>Error loading data. See console for details.</p>';
+            });
+
+        // Function to render the table
+        function renderTable(data) {
+            const container = document.getElementById('table-container');
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p>No data available.</p>';
+                return;
+            }
+
+            // Create table element
+            const table = document.createElement('table');
+
+            // Create table header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+
+            // Add headers (assuming data is an array of objects)
+            Object.keys(data[0]).forEach((key, index) => {
+
+                const th = document.createElement('th');
+
+                if (index == 0)
+                    th.textContent = "";
+                else
+                    th.textContent = key;
+
+                headerRow.appendChild(th);
+            });
+
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create table body
+            const tbody = document.createElement('tbody');
+
+            data.forEach(item => {
+                const row = document.createElement('tr');
+
+                Object.values(item).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    row.appendChild(td);
+                });
+
+                tbody.appendChild(row);
+            });
+
+            table.appendChild(tbody);
+            container.appendChild(table);
+        }
+
+        filterByName();
+
+    </script>
+</body>
+
+</html>

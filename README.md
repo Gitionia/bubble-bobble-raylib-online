@@ -1,5 +1,5 @@
 # Leaderboard for Bubble Bobble Raylib
-This is the repository for the leaderboard page for bubble bobble raylib. The page is available at https://gitionia.github.io/bubble-bobble-raylib-online/leaderboard/
+This is the repository for the leaderboard page for [BubbleBobbleRaylib](https://github.com/Gitionia/BubbleBobbleRaylib). The page is available at https://gitionia.github.io/bubble-bobble-raylib-online/leaderboard/
 
 # Functionality
 - The leaderboard shows the round, score, player name and date

@@ -9,7 +9,7 @@ This is the repository for the leaderboard page for [BubbleBobbleRaylib](https:/
 - The leaderboard is stored on a supabase database 
 - The database contains only the following data: 
     - A timestamp when it was added
-    - A player name of length 3
+    - A player name of length 3, set by the player
     - The score
     - The level that was reached
     - The version of the game, on which the score was reached (not displayed on the page)
